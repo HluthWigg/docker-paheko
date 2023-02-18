@@ -3,6 +3,9 @@ FROM alpine:${ALPINE_VERSION}
 LABEL Maintainer="HluthWigg"
 LABEL Description="Paheko on Alpine Linux with Docker"
 
+# Volume expose
+VOLUME /var/www
+
 # Setup document root
 WORKDIR /var/www/
 
@@ -89,9 +92,6 @@ USER nobody
 
 # Expose the port nginx is reachable on (documentation purposes only)
 EXPOSE 80
-
-# Volume expose
-VOLUME /var/www
 
 ## Let supervisord start nginx & php-fpm
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
