@@ -1,13 +1,13 @@
 ARG ALPINE_VERSION=3.17
 FROM alpine:${ALPINE_VERSION}
 LABEL Maintainer="HluthWigg"
-LABEL Description="Garradin on Alpine Linux with Docker"
+LABEL Description="Paheko on Alpine Linux with Docker"
 
 # Setup document root
 WORKDIR /var/www/
 
 # Change the version here
-ENV GARRADIN_VERSION 1.2.6
+ENV PAHEKO_VERSION 1.2.6
 
 # Install packages and remove default server definition
 RUN apk add --no-cache \
@@ -39,13 +39,13 @@ RUN apk add --no-cache \
   gettext
 
 # Downloading and installing Garradin
-RUN curl -L -O https://fossil.kd2.org/garradin/uv/paheko-$GARRADIN_VERSION.tar.gz # download
-RUN tar xzvf paheko-$GARRADIN_VERSION.tar.gz # extract
-RUN mv paheko-$GARRADIN_VERSION /var/www/garradin # root of the website
-RUN rm -r paheko-$GARRADIN_VERSION.tar.gz # cleaning
+RUN curl -L -O https://fossil.kd2.org/garradin/uv/paheko-$PAHEKO_VERSION.tar.gz # download
+RUN tar xzvf paheko-$PAHEKO_VERSION.tar.gz # extract
+RUN mv paheko-$PAHEKO_VERSION /var/www/paheko # root of the website
+RUN rm -r paheko-$PAHEKO_VERSION.tar.gz # cleaning
 
 # Download and install plugins
-RUN cd /var/www/garradin/data/plugins && \
+RUN cd /var/www/paheko/data/plugins && \
 curl -L -O https://fossil.kd2.org/garradin-plugins/uv/ouvertures.tar.gz ; \
 curl -L -O https://fossil.kd2.org/garradin-plugins/uv/stock_velos.tar.gz ; \
 curl -L -O https://fossil.kd2.org/garradin-plugins/uv/reservations.tar.gz ; \
@@ -57,22 +57,22 @@ curl -L -O https://fossil.kd2.org/garradin-plugins/uv/caisse.tar.gz ;
 #RUN curl -L -O https://fossil.kd2.org/garradin-plugins/uv/helloasso.tar.gz
 #RUN curl -L -O https://fossil.kd2.org/garradin-plugins/uv/dompdf.tar.gz
 #RUN curl -L -O https://fossil.kd2.org/garradin-plugins/uv/taima.tar.gz
-#RUN mv helloasso.tar.gz /var/www/garradin/data/plugins/
-#RUN mv *.tar.gz /var/www/garradin/data/plugins/
+#RUN mv helloasso.tar.gz /var/www/paheko/data/plugins/
+#RUN mv *.tar.gz /var/www/paheko/data/plugins/
 
 # Create symlink so programs depending on `php` still function
 # RUN ln -s /usr/bin/php81 /usr/bin/php
 
 # Configure nginx
 RUN rm /etc/nginx/http.d/default.conf # remove this file because it listens on port 80 and it blocks other vhost
-COPY config/nginx-garradin.conf /etc/nginx/http.d
+COPY config/nginx-paheko.conf /etc/nginx/http.d
 
 # Configure PHP (seems useless)
 # to have the function finfo_open (uncomment ;extension=fileinfo)
 #COPY config/php.ini /etc/php81/php.ini
 
 # Configure PHP-FPM
-COPY config/fpm-garradin.conf /etc/php81/php-fpm.d/
+COPY config/fpm-paheko.conf /etc/php81/php-fpm.d/
 
 # Configure timezone
 COPY config/php-custom.ini /etc/php81/conf.d/custom.ini
@@ -82,7 +82,7 @@ COPY config/supervisord.conf /etc/supervisord.conf
 #COPY supervisord.conf /etc/supervisord.conf
 
 ## Make sure files/folders needed by the processes are accessable when they run under the nobody user
-RUN chown -R nobody:  /run /var/lib/nginx /var/log/nginx /var/www/garradin
+RUN chown -R nobody:  /run /var/lib/nginx /var/log/nginx /var/www/paheko
 
 # Switch to use a non-root user from here on
 USER nobody
