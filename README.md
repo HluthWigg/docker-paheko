@@ -1,14 +1,14 @@
-# docker-garradin
+# docker-paheko
 
-Garradin on Alpine Linux with Docker. With Alpine 3.1.16, PHP 8.1 and Nginx 1.22.0.
+Paheko on Alpine Linux with Docker. With Alpine 3.1.16, PHP 8.1 and Nginx 1.22.0.
 
 ## Usage
 
 Pre-requisite : *Docker Desktop*.
 
-**Option 1** from [*Docker Hub*](https://hub.docker.com/r/samuelallain/garradin) : download the image and launch the container in one line
+**Option 1** from [*Docker Hub*](https://hub.docker.com/r/hluthwigg/paheko) : download the image and launch the container in one line
 ```
-sudo docker run -d -t --name ga -p 80:80 -v vol-ga:/var/www/garradin/data/ hluthwigg/garradin 
+sudo docker run -d -t --name ga -p 80:80 -v vol-ga:/var/www/paheko/data/ hluthwigg/paheko 
 ```
 
 
@@ -16,14 +16,14 @@ sudo docker run -d -t --name ga -p 80:80 -v vol-ga:/var/www/garradin/data/ hluth
 
 ```
 # clone the repository
-git clone https://github.com/HluthWigg/docker-garradin.git
-cd docker-garradin
+git clone https://github.com/HluthWigg/docker-paheko.git
+cd docker-paheko
 
 # build the image
-sudo docker build -t garradin .
+sudo docker build -t paheko .
 
 # launch the container
-sudo docker run -d -t --name ga -p 80:80 -v vol-ga:/var/www/garradin/data/ garradin 
+sudo docker run -d -t --name ga -p 80:80 -v vol-ga:/var/www/paheko/data/ paheko 
 ```
 **Then open [http://localhost:80](http://localhost:80) in your browser.**
 
@@ -60,7 +60,7 @@ It also relies on resources hosted on Garradin's fossil server :
 
 *Disclaimer : those comments come from a newbie.*
 
-**Garradin** is a PHP-written website, not a simple software.
+**Garradin/Paheko** is a PHP-written website, not a simple software.
 Therefore, its installation is not that easy.
 It requires a web server (Nginx or Apache), with a PHP interpreter (PHP-FPM).
 
@@ -77,14 +77,14 @@ And you can check that your configuration is well taken into account by `nginx -
 **Nginx and PHP-FPM** communicate through a socket (*/run/garradin.socket*) as you can see in *config/nginx-garradin.conf* and *config/fpm-garradin.conf*.
 As I imagine it, when Nginx receive a request over a PHP file, it sends it to PHP for interpretation and PHP hands back a HTML file to Nginx which sends it to the browser.
 
-**Beware :** in the nginx configuration file *garradin.conf*, the root has to be the ***www***, **inside** the *garradin* folder, not the *garradin* itself.
+**Beware :** in the nginx configuration file *paheko.conf*, the root has to be the ***www***, **inside** the *garradin* folder, not the *garradin* itself.
 Otherwise, you would receive a warning "Garradin n'est pas installé sur un sous-domaine dédié."
 
 ### Version compatibility
 
-If you want to test another garradin version, you first need to check [available versions of garradin](https://fossil.kd2.org/garradin/uvlist).
-Then you can put it as `GARRADIN_VERSION` in the *Dockerfile*.
-If the version you want is only provided with the format *.tar.bz2*, change `tar xzvf garradin-$GARRADIN_VERSION.tar.gz` by `tar xjvf garradin-$GARRADIN_VERSION.tar.bz2`.
+If you want to test another Paheko version, you first need to check [available versions of Paheko](https://fossil.kd2.org/garradin/uvlist).
+Then you can put it as `PAHEKO_VERSION` in the *Dockerfile*.
+If the version you want is only provided with the format *.tar.bz2*, change `tar xzvf garradin-$GARRADIN_VERSION.tar.gz` by `tar xjvf paheko-$PAHEKO_VERSION.tar.bz2`.
 
 Then you have to check which PHP version is required for this Garradin version. You can do that with a case-sensitive "PHP" search on the [changelog](https://fossil.kd2.org/garradin/wiki/?name=Changelog).
 
@@ -97,7 +97,7 @@ I added it to the `RUN apk add` line in the **Dockerfile**
 
 ### Plugins
 
-(Thanks @gromain) I have put all available plugins as of July 3rd, 2022 in the docker image.
+(Thanks @gromain) All available plugins as of July 3rd, 2022 in the docker image.
 You can install more plugins as explained [here](https://fossil.kd2.org/garradin-plugins/index).
 You need to download the `.tar.gz` in the directory `/var/www/garradin/data/plugins` and then connect to garradin (*localhost:80*) > *Configuration* > *Plugins* and then tick and install desired plugins.
 **DomPDF** requires **php-zip**.
